@@ -1,4 +1,4 @@
-# 🏏 Captain Cool — Multi-Agent IPL Match Strategist
+    # 🏏 Captain Cool — Multi-Agent IPL Match Strategist
 
 > **Built on Google Gemini 2.5 Flash** | APL 2025 Submission | Multi-Agent AI System
 
@@ -13,13 +13,6 @@
 **Captain Cool** is an agentic AI system that acts as a **virtual IPL captain** — making the next tactical decision in a live match the way Dhoni, Rohit, or Hardik would.
 
 Input the current match state → 4 specialized Gemini agents debate in real-time → Get the captain's optimal tactical call.
-
-### 🚨 NEW: LIVE HYPE-MAN MODE
-When the judges walk up to your table, switch to **Hype-Man Mode**! Feed it a live match event (e.g., "Dhoni hits a 100m six") and the app will instantly:
-- Generate a massive neon screen alert
-- Blast "Spicy Hinglish" meme commentary **OUT LOUD** using the Web Speech API
-- Generate a prompt for Google Imagen 3 to visualize the hype
-- Show the intensity level of the moment
 
 ---
 
