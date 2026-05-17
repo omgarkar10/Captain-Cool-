@@ -61,7 +61,7 @@ export default function HypeManPanel() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to get hype");
+      if (!res.ok) throw new Error(data.details || data.error || "Failed to get hype");
 
       setHypeData(data.data);
       // Speak the commentary automatically when it arrives

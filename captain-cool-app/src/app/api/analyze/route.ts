@@ -273,7 +273,7 @@ async function runAgentWithTools(
 
   // Tool-use loop
   let iterations = 0;
-  const maxIterations = 5;
+  const maxIterations = 2;
   const conversationHistory: Array<{
     role: string;
     parts: Array<Record<string, unknown>>;

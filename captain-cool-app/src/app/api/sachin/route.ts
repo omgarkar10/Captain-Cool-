@@ -197,7 +197,7 @@ OUTPUT FORMAT (pure JSON, no markdown):
     { role: "user", parts: [{ text: `LIVE MATCH UPDATE:\n${liveData}` }] },
   ];
 
-  while (iterations < 4) {
+  while (iterations < 2) {
     const parts = response.candidates?.[0]?.content?.parts || [];
     const functionCalls = parts.filter((p) => p.functionCall);
 
