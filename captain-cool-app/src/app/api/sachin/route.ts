@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI, Type } from "@google/genai";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+import { Type } from "@google/genai";
+import { generateContentWithRetry, ai } from "@/utils/gemini";
 
 // ─── ADK-Style Tool Declarations ───────────────────────────────────────────────
 
@@ -182,7 +181,7 @@ OUTPUT FORMAT (pure JSON, no markdown):
   "tactical_take": "One sentence of actual cricket analysis as a former captain would give"
 }`;
 
-  let response = await ai.models.generateContent({
+  let response = await generateContentWithRetry({
     model: "gemini-2.5-flash",
     config: {
       systemInstruction: systemPrompt,
@@ -220,7 +219,7 @@ OUTPUT FORMAT (pure JSON, no markdown):
 
     history.push({ role: "user", parts: toolResults });
 
-    response = await ai.models.generateContent({
+    response = await generateContentWithRetry({
       model: "gemini-2.5-flash",
       config: { systemInstruction: systemPrompt, tools, temperature: 0.85 },
       contents: history as Parameters<typeof ai.models.generateContent>[0]["contents"],

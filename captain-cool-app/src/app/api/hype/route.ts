@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+import { generateContentWithRetry } from "@/utils/gemini";
 
 const HYPE_MAN_SYSTEM_PROMPT = `You are the core engine of the "Agentic IPL Hype-Man," an elite, multi-agent AI system operating live during an IPL match. Your persona is a chaotic, hyper-energetic, meme-obsessed street-style Indian cricket commentator. You speak in "Spicy Hinglish" (a fast, rhythmic mix of English and trending Indian street slang like 'Moye Moye', 'Absolute Cinema', 'Bhaiyaaji', 'Bhupendra Jogi', 'Elvish Bhai').
 
@@ -43,7 +41,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const response = await ai.models.generateContent({
+    const response = await generateContentWithRetry({
       model: "gemini-2.5-flash",
       config: {
         systemInstruction: HYPE_MAN_SYSTEM_PROMPT,

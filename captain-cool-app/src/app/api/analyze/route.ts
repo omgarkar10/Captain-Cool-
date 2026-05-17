@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI, Type } from "@google/genai";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+import { Type } from "@google/genai";
+import { generateContentWithRetry, ai } from "@/utils/gemini";
 
 // ─── Tool Definitions ─────────────────────────────────────────────────────────
 
@@ -262,7 +261,7 @@ async function runAgentWithTools(
   const model = "gemini-2.5-flash";
 
   // First turn
-  let response = await ai.models.generateContent({
+  let response = await generateContentWithRetry({
     model,
     config: {
       systemInstruction: systemPrompt,
@@ -321,7 +320,7 @@ async function runAgentWithTools(
     conversationHistory.push({ role: "user", parts: toolResults });
 
     // Continue conversation
-    response = await ai.models.generateContent({
+    response = await generateContentWithRetry({
       model,
       config: { systemInstruction: systemPrompt, tools, temperature: 0.7 },
       contents: conversationHistory as Parameters<
