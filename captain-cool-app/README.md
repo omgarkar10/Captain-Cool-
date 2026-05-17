@@ -10,29 +10,50 @@
 
 ## 🎯 What Is This?
 
-**Captain Cool** is an agentic AI system that acts as a **virtual IPL captain** — making the next tactical decision in a live match the way Dhoni, Rohit, or Hardik would.
+An **agentic AI system** that acts as a virtual IPL captain — making tactical decisions the way Dhoni, Rohit, or Hardik would. Plus a **live Sachin Tendulkar AI companion** that reacts to IPL matches with memes, memories, and spicy Hinglish commentary that **talks out loud**!
 
-Input the current match state → 4 specialized Gemini agents debate in real-time → Get the captain's optimal tactical call.
+Input the current match state → 5 specialized Gemini agents debate in real-time → Get the captain's optimal tactical call.
 
 ---
 
-## 🤖 The 4 Gemini Agents
+## 🚀 Three Modes
+
+### 🏏 Sachin LIVE Mode (Default)
+- **Live Scoreboard** — Real-time match data with animated ball-by-ball feed
+- **Sachin Tendulkar AI** — Reacts to live match events as the Master Blaster
+- **Voice Commentary** — Speaks the commentary OUT LOUD using Web Speech API
+- **Meme Engine** — Generates Indian meme references (Moye Moye, Absolute Cinema)
+- **Sachin Memories** — References personal cricket history from his career
+- **Tactical Analysis** — Expert cricket analysis from the God of Cricket
+- **Auto Mode** — Auto-refreshes every 25 seconds for hands-free commentary
+
+### 🧠 Captain Strategist Mode
+- **4 Gemini Agents** debate the next tactical decision
+- **3 Preset Scenarios** — Classic CSK Chase, MI Death Over Crisis, KKR Powerplay
+- **Function Calling** — Real tool use for win probability, pitch analysis, player profiles
+- **Multi-Turn Reasoning** — Full agent debate loop with dissenting opinions
+
+### 🎙️ Hype-Man Mode
+- Feed a live event → Get explosive Hinglish commentary
+- **Screen Alert** — Massive neon animated text
+- **Audio Output** — Speaks the hype commentary aloud
+- **Imagen Prompt** — Generates prompts for Google Imagen 3
+
+---
+
+## 🤖 The 5 Gemini Agents
 
 ```
-📊 Stats Analyst → 🧠 Strategist → 😈 Devil's Advocate → 🏏 Captain Cool
+📊 Stats Analyst → 🧠 Strategist → 😈 Devil's Advocate → 🏏 Captain Cool → 🎙️ Sachin
 ```
 
 | Agent | Role | Gemini Feature |
 |-------|------|----------------|
 | **📊 Stats Analyst** | Fetches win probability, pitch analysis, player profiles | Function calling / Tool use |
-| **🧠 Strategist** | Reads analyst data, proposes the tactical decision | Multi-turn context, cricket system prompt |
-| **😈 Devil's Advocate** | Challenges the Strategist, finds flaws | Adversarial reasoning prompt |
-| **🏏 Captain Cool** | Synthesizes the debate, issues the FINAL CALL | Final synthesis with cricket commentary |
-
-Each agent has:
-- Its own **distinct system prompt** with a unique persona and role
-- **Real Gemini 2.5 Flash** model calls (not a single Gemini call wearing 4 hats)
-- Information flow: earlier agents' outputs are passed as context to later agents
+| **🧠 Strategist** | Makes THE tactical call — bowling, batting, field setup | Multi-turn reasoning |
+| **😈 Devil's Advocate** | Challenges the strategy with cricket-smart counter-arguments | Adversarial prompting |
+| **🏏 Captain Cool** | Final synthesis — Dhoni's calm + Rohit's instinct + Hardik's boldness | Multi-agent synthesis |
+| **🎙️ Sachin AI** | Live commentary with mood, memes, memories, and tactical takes | Function calling + Tool use |
 
 ---
 
@@ -40,11 +61,15 @@ Each agent has:
 
 The **Stats Analyst** uses Gemini function calling with 3 tools:
 
-1. **`get_win_probability`** — Calculates live win probability based on match state (innings, over, wickets, run rate, target)
-2. **`get_pitch_analysis`** — Returns bowler type recommendations, batting approach based on venue + pitch conditions + dew
+1. **`get_win_probability`** — Calculates live win probability based on match state
+2. **`get_pitch_analysis`** — Returns bowler type recommendations, batting approach based on venue + pitch + dew
 3. **`get_player_profile`** — Fetches player stats and recent form
 
-The agent calls these tools autonomously, processes the results, and incorporates them into its analysis.
+The **Sachin Agent** uses 3 additional tools:
+
+4. **`get_sachin_mood`** — Determines emotional reaction intensity (1-10) and avatar state
+5. **`get_meme_reference`** — Returns trending Indian meme references matching the cricket situation
+6. **`get_historical_comparison`** — Finds similar moments from Sachin's playing career
 
 ---
 
@@ -52,122 +77,114 @@ The agent calls these tools autonomously, processes the results, and incorporate
 
 ```
 1. Stats Analyst analyzes match → calls tools → produces statistical report
-2. Strategist reads stats report → proposes a tactical decision
-3. Devil's Advocate reads Strategist's decision → challenges it with specific cricket reasoning
-4. Captain Cool reads the FULL DEBATE → either defends or revises → issues final call
+2. Strategist reads report → makes THE CALL with cricket reasoning
+3. Devil's Advocate attacks the call → proposes counter-strategy
+4. Captain Cool synthesizes the debate → delivers final captain's decision
 ```
-
-The final output **always shows this back-and-forth** — all 4 agents' outputs are displayed in the UI.
-
----
-
-## 📥 Inputs Supported
-
-| Input | Options |
-|-------|---------|
-| Innings, Over, Ball | Full match state |
-| Score, Wickets, RR | Real-time scoreboard |
-| Batting/Bowling Teams | All 10 IPL teams |
-| Striker / Non-striker | Named players |
-| Venue | All 10 IPL stadiums |
-| Pitch Type | Turning / Flat / Two-paced / Green-top |
-| Dew Factor | None / Light / Heavy |
-| Target & Required RR | 2nd innings chasing |
-| Impact Player | Available or used |
-| Bowler overs used | Per-bowler tracking |
-| Strategic Timeout | Available or used |
-| Additional context | Free-text match notes |
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+
-- Google Gemini API key ([Get one here](https://aistudio.google.com/))
-
-### Installation
-
-```bash
-cd captain-cool-app
-npm install
-```
-
-### Configuration
-
-Copy `.env.local` and add your key:
-
-```bash
-# .env.local
-GEMINI_API_KEY=your_gemini_api_key_here
-```
-
-### Run
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000)
 
 ---
 
 ## 🏗️ Architecture
 
 ```
-src/
-├── app/
-│   ├── api/
-│   │   └── analyze/
-│   │       └── route.ts          # 🧠 Core multi-agent orchestration
-│   ├── globals.css               # Styling
-│   ├── layout.tsx                # Root layout + SEO
-│   └── page.tsx                  # Main page
-├── components/
-│   ├── HeroSection.tsx           # Animated hero
-│   ├── MatchInputForm.tsx        # Match state input + 3 preset scenarios
-│   └── AgentDebatePanel.tsx      # Tabbed debate display
-└── types/
-    └── index.ts                  # TypeScript types
-```
-
-### Agent Flow
-
-```mermaid
-graph LR
-    A[User Input] --> B[Stats Analyst\nGemini 2.5 Flash\n+ Tool Calls]
-    B --> C[Strategist\nGemini 2.5 Flash\nProposes Decision]
-    C --> D[Devil's Advocate\nGemini 2.5 Flash\nChallenges Decision]
-    D --> E[Captain Cool\nGemini 2.5 Flash\nFinal Synthesis]
-    E --> F[UI: Tabbed Debate Display]
+┌──────────────────────────────────────────────────┐
+│                  Next.js Frontend                 │
+│  ┌──────────┐  ┌──────────┐  ┌──────────────┐   │
+│  │Sachin Live│  │Strategist│  │  Hype-Man    │   │
+│  │Dashboard  │  │  Form    │  │   Panel      │   │
+│  └─────┬────┘  └────┬─────┘  └──────┬───────┘   │
+│        │             │               │            │
+│  ┌─────▼─────────────▼───────────────▼─────────┐ │
+│  │            API Routes (Server)               │ │
+│  │  /api/sachin  /api/analyze  /api/hype        │ │
+│  │  /api/live-match                             │ │
+│  └─────┬─────────────┬───────────────┬─────────┘ │
+└────────┼─────────────┼───────────────┼───────────┘
+         │             │               │
+   ┌─────▼─────┐ ┌────▼────┐   ┌─────▼─────┐
+   │  Gemini   │ │ Gemini  │   │  Gemini   │
+   │  Sachin   │ │ 4-Agent │   │  Hype-Man │
+   │  Agent    │ │ Pipeline│   │  Agent    │
+   │ (3 tools) │ │(3 tools)│   │           │
+   └───────────┘ └─────────┘   └───────────┘
 ```
 
 ---
 
-## 📣 Sample Output
+## 🚀 Getting Started
 
-### Captain's Call Example (CSK chasing 197 at Wankhede, 16th over):
+```bash
+# 1. Clone the repo
+git clone https://github.com/your-repo/captain-cool.git
+cd captain-cool/captain-cool-app
 
-> **THE DECISION:** Send Dhoni in now. Bowl Bumrah's final over immediately — don't hold him.
->
-> **Commentary:** "Yahan se match palta hai — this is the over that decides it. Heavy dew has killed Jadeja's spin, so you can't persist with him. The flat Wankhede surface rewards straight hitting, and with 39 off 21, only Dhoni has the temperament to finish this in calculated bursts. Bumrah in the 17th creates pressure; Dhoni targets the 19th for carnage."
+# 2. Install dependencies
+npm install
 
----
+# 3. Add your Gemini API key
+echo "GEMINI_API_KEY=your_key_here" > .env.local
 
-## 🏆 Built For
+# 4. Start the dev server
+npm run dev
 
-**APL 2025** by GDG — Google's 3-hour vibe-coding hackathon
-
-**Mandatory Tech Stack Used:**
-- ✅ Gemini API — `gemini-2.5-flash` via `@google/genai`
-- ✅ Gemini Function Calling — 3 real tool declarations
-- ✅ Multi-agent architecture — 4 named, distinct agents with separate system prompts
-- ✅ Multi-turn reasoning loop — Propose → Challenge → Synthesize
-- ✅ Cricket-language output — Real commentator-style final decisions
-- ✅ Google Antigravity — Built using Antigravity IDE
+# 5. Open http://localhost:3000
+```
 
 ---
 
-## 📝 License
+## 🛠️ Tech Stack
 
-MIT
+| Technology | Purpose |
+|-----------|---------|
+| **Google Gemini 2.5 Flash** | All agent reasoning, function calling, multi-turn |
+| **Next.js 15** | Full-stack React framework (App Router) |
+| **TypeScript** | Type-safe codebase |
+| **Tailwind CSS v4** | Utility-first styling with custom animations |
+| **Web Speech API** | Browser-native text-to-speech for live commentary |
+| **Framer Motion** | UI animations and transitions |
+
+---
+
+## 📁 Project Structure
+
+```
+captain-cool-app/
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── analyze/route.ts    # 4-agent strategist pipeline
+│   │   │   ├── sachin/route.ts     # Sachin Tendulkar AI (3 tools)
+│   │   │   ├── hype/route.ts       # Hype-Man commentary agent
+│   │   │   └── live-match/route.ts # Live match data scraper
+│   │   ├── globals.css             # Premium animations & effects
+│   │   ├── layout.tsx              # Root layout with SEO
+│   │   └── page.tsx                # Main page with 3-mode switcher
+│   ├── components/
+│   │   ├── SachinLiveDashboard.tsx  # Live avatar + commentary + memes
+│   │   ├── MatchInputForm.tsx       # Match state input with presets
+│   │   ├── AgentDebatePanel.tsx     # 4-agent debate visualization
+│   │   ├── HypeManPanel.tsx         # Hype commentary panel
+│   │   └── HeroSection.tsx          # Animated hero with feature pills
+│   └── types/
+│       └── index.ts                 # Shared TypeScript types
+├── .env.local                       # GEMINI_API_KEY
+└── package.json
+```
+
+---
+
+## 🏆 APL Evaluation Criteria Coverage
+
+| Criteria | How We Deliver |
+|----------|---------------|
+| **Gemini API** | ✅ All 5 agents use `gemini-2.5-flash` exclusively |
+| **Function Calling** | ✅ 6 custom tools across agents |
+| **Multi-Agent** | ✅ 4-agent debate pipeline + Sachin agent |
+| **Multi-Turn** | ✅ Tool-use loops with up to 5 iterations |
+| **Creativity** | ✅ Sachin persona, meme engine, voice output |
+| **UI/UX** | ✅ Premium dark theme, animations, glassmorphism |
+| **Live Features** | ✅ Real-time match data, auto-commenting, voice |
+
+---
+
+**Made with 🏏 and Google Gemini**
